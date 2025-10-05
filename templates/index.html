@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TSP — Held-Karp</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Travelling Salesman — Held-Karp (DP)</h1>
+    <p class="lead">Paste a square distance matrix. Start city assumed to be index 0.</p>
+
+    <div class="card">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat, msg in messages %}
+            <div class="{{cat}}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="post">
+        <label for="matrix">Distance matrix</label>
+        <textarea id="matrix" name="matrix" rows="8">{{ example }}</textarea>
+        <button type="submit">Solve TSP</button>
+      </form>
+
+      {% if matrix_table %}
+        <hr>
+        <h3>Parsed Matrix ({{n}} × {{n}})</h3>
+        <table>
+          <tbody>
+            {% for row in matrix_table %}
+              <tr>
+                {% for cell in row %}
+                  <td>{{ cell }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <h3>Result</h3>
+        {% if result_cost is not none %}
+          <pre>Minimum Tour Cost: {{ result_cost }} Optimal Tour Path: {{ result_path }}</pre>
+        {% else %}
+          <div class="error">Could not find a valid tour.</div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <p class="muted small">Example input:<br>
+      0,10,15,20<br>
+      10,0,35,25<br>
+      15,35,0,30<br>
+      20,25,30,0
+    </p>
+  </div>
+</body>
+</html>
